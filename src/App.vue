@@ -4,16 +4,15 @@
       <nav class='nav'>
         <div class='left'>
           <router-link :to='lang' class='brand'>BetterScroll</router-link>
-          <a href='#' class='brand'>BetterScroll</a>
           <a class='tab' href='https://ustbhuangyi.github.io/better-scroll/doc/' target='_blank'>{{ $t('navigator.doc') }}</a>
           <router-link :to='examplesPath' class='tab'>{{ $t('navigator.demo') }}</router-link>
         </div>
         <div class='right'>
           <span class='tab language-wrapper'>
-            <span @click='onDropdownClick'>Language</span>
-            <ul class='option-wrapper' v-show='isShowDropdown'>
-              <li>English</li>
-              <li>中文</li>
+            <span @click='toogleLanguage'>Language</span>
+            <ul class='option-wrapper' v-show='showLanguage'>
+              <li @click="chooseLanguage('en')">English</li>
+              <li @click="chooseLanguage('zh')">中文</li>
             </ul>
           </span>
           <a href='https://github.com/ustbhuangyi/better-scroll' target='_blank'>
@@ -24,7 +23,7 @@
       <h1 class='project-name'>BetterScroll</h1>
       <h2 class='project-tagline'>inspired by iscroll, and it has a better scroll perfermance</h2>
       <a class='btn' href='https://ustbhuangyi.github.io/better-scroll/doc/' target='_blank'>{{ $t('navigator.started') }}</a>
-      <router-link :to='examplesPath' class='btn'>demo</router-link>
+      <router-link :to='examplesPath' class='btn'>{{ $t('navigator.demo') }}</router-link>
     </section>
     <section class='main-content'>
       <transition name='fade'>
@@ -49,7 +48,7 @@ export default {
   data () {
     return {
       githubIcon: githubIcon,
-      isShowDropdown: false
+      showLanguage: false
     }
   },
   computed: {
@@ -60,9 +59,19 @@ export default {
       return '/examples/' + this.$i18n.locale
     }
   },
+  created () {
+    this.$i18n.locale = this.$route.params.lang === 'zh' ? 'zh' : 'en'
+  },
   methods: {
-    onDropdownClick () {
-      this.isShowDropdown = !this.isShowDropdown
+    chooseLanguage (lang) {
+      if (this.$route.params.lang !== lang) {
+        this.$i18n.locale = lang
+        let newPath = this.$route.path.substring(0, -2) + lang
+        this.$router.replace(newPath)
+      }
+    },
+    toogleLanguage () {
+      this.showLanguage = !this.showLanguage
     }
   }
 }
