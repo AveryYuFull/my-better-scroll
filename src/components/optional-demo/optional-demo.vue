@@ -1,0 +1,124 @@
+<template>
+    <div class='page'>
+        <header class='header'>
+            <img class='back' :src='backIcon' alt='back' />
+            <h1>普通 Scroll 组件</h1>
+        </header>
+        <div ref='wrapper' class='page-content'>
+            <main class='main-content'>
+                <section class='desc'>
+                    <span>基于 BScroll 实现垂直滚动列表组件</span>
+                </section>
+                <div class='options'>
+                    <div class='title sub'>Options</div>
+                    <div class='option-list content'></div>
+                </div>
+                <div class='demo'>
+                    <div class='title sub'>Demo</div>
+                    <div class='scroll-list-wrap content'></div>
+                </div>
+                <div class='methods'>
+                    <div class='title sub'>Methods</div>
+                    <div class='method-list content'>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+</template>
+
+<script>
+import backIcon from '../../commons/images/back.svg'
+
+export default {
+    data () {
+        return {
+            backIcon
+        }
+    }
+}
+</script>
+
+<style lang='less'>
+.view {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    z-index: 99;
+}
+.page {
+    .header {
+        position: relative;
+        line-height: 44px;
+        height: 44px;
+        box-shadow: 0 1px 6px #ccc;
+        h1 {
+            margin: 0;
+            font-size: 16px;
+            color: #007bff;
+        }
+        .back {
+            position: absolute;
+            top: 8px;
+            left: 0;
+            width: 26px;
+        }
+    }
+    .page-content {
+        .title {
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: #333;
+            padding: 1rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            margin-bottom: 1rem;
+        }
+        .main-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            @media screen and (min-width: 42rem) {
+                padding: 2rem 2rem;
+                font-size: 1.1rem;
+            }
+            @media screen and (max-width: 42rem) {
+                padding: 1rem 1rem 2rem 1rem;
+                font-size: 1rem;
+            }
+            .desc {
+                flex: 0 1 100%;
+                text-align: left;
+                margin: 0.7rem 0;
+                @media screen and (min-width: 42rem) {
+                    margin: 2rem 0;
+                }
+            }
+            .options {
+                flex: 0 1 25%;
+                @media screen and (max-width: 42rem) {
+                    flex: 0 1 100%;
+                }
+            }
+            .demo {
+                flex: 0 1 23rem;
+                @media screen and (max-width: 42rem) {
+                    flex: 0 1 100%;
+                }
+            }
+            .methods {
+                flex: 0 1 25%;
+                @media screen and (max-width: 42rem) {
+                    flex: 0 1 100%;
+                }
+            }
+            .content {
+                border: 1px solid;
+                height: 600px;
+            }
+        }
+    }
+}
+</style>

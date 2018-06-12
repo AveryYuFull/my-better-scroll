@@ -1,14 +1,16 @@
 <template>
 <div>
-    Welcome to Vertical Scroll page.
+    <optional-demo></optional-demo>
 </div>
 </template>
 
 <script>
-export default {
-    mounted () {
-        console.log('componet is mounted')
-    }
+import OptionalDemo from '../../components/optional-demo/optional-demo'
+
+export default {    
+    components: {
+        "optional-demo": OptionalDemo
+    }    
 }
 </script>
 
