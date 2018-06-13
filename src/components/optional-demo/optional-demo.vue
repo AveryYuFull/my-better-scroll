@@ -11,7 +11,9 @@
                 </section>
                 <div class='options'>
                     <div class='title sub'>Options</div>
-                    <div class='option-list content'></div>
+                    <div class='option-list'>
+                        <slot name="options"></slot>
+                    </div>
                 </div>
                 <div class='demo'>
                     <div class='title sub'>Demo</div>
@@ -19,7 +21,8 @@
                 </div>
                 <div class='methods'>
                     <div class='title sub'>Methods</div>
-                    <div class='method-list content'>
+                    <div class='method-list'>
+                        <slot name='methods'></slot>
                     </div>
                 </div>
             </main>
@@ -50,6 +53,7 @@ export default {
     z-index: 99;
 }
 .page {
+    font-weight: normal;    
     .header {
         position: relative;
         line-height: 44px;
