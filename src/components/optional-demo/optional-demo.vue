@@ -17,7 +17,9 @@
                 </div>
                 <div class='demo'>
                     <div class='title sub'>Demo</div>
-                    <div class='scroll-list-wrap content'></div>
+                    <div class='scroll-list-wrap'>
+                        <slot name='demo'></slot>
+                    </div>
                 </div>
                 <div class='methods'>
                     <div class='title sub'>Methods</div>
@@ -110,6 +112,13 @@ export default {
                 flex: 0 1 23rem;
                 @media screen and (max-width: 42rem) {
                     flex: 0 1 100%;
+                }
+                .scroll-list-wrap {
+                    height: 30rem;
+                    position: relative;
+                    border: 1px solid rgba(0, 0, 0, 0.1);
+                    border-radius: .3rem;
+                    overflow: hidden;
                 }
             }
             .methods {

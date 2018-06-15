@@ -7,6 +7,7 @@ import i18n from './language'
 
 import './css/reset.css'
 import './css/stylesheet.less'
+import './css/normalize.less'
 
 Vue.config.productionTip = false
 

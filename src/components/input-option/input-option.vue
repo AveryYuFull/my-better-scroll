@@ -41,6 +41,7 @@ export default {
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding-left: 15px;
     &.last {
         border-bottom: none;
     }

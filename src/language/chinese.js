@@ -35,5 +35,11 @@ export default {
     startGuidancePic: 'full-page-slide.jpeg',
     freeScrollPic: 'free-scroll.jpeg',
     formListPic: 'form-list.jpeg'
-  }
+  },
+  
+  scrollComponent: {
+    defaultLoadTxtMore: '加载更多',
+    defaultLoadTxtNoMore: '没有更多数据了',
+    defaultRefreshTxt: '刷新成功'
+  },
 }

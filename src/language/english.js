@@ -34,5 +34,11 @@ export default {
       startGuidancePic: 'full-page-slide.jpeg',
       freeScrollPic: 'free-scroll.jpeg',
       formListPic: 'form-list.jpeg'
-  }
+  },
+
+  scrollComponent: {
+    defaultLoadTxtMore: 'Load more',
+    defaultLoadTxtNoMore: 'There is no more data',
+    defaultRefreshTxt: 'Refresh success'
+  },
 }
