@@ -36,9 +36,19 @@ export default {
       formListPic: 'form-list.jpeg'
   },
 
+  normalScrollListPage: {
+    desc: 'Nomal scroll list based on BetterScroll',
+    scrollbar: 'Scrollbar',
+    pullDownRefresh: 'Pull Down Refresh',
+    pullUpLoad: 'Pull Up Load',
+    previousTxt: 'I am the No.',
+    followingTxt: ' line',
+    newDataTxt: 'I am new data: '
+  },
+
   scrollComponent: {
     defaultLoadTxtMore: 'Load more',
     defaultLoadTxtNoMore: 'There is no more data',
     defaultRefreshTxt: 'Refresh success'
-  },
+  }
 }

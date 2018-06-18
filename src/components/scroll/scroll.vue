@@ -1,42 +1,45 @@
 <template>
-    <div ref='wrapper' class='list-wrapper'>
-        <div class='scroll-content'>
-            <slot name='list-content'>
-                <ul class='list-content' ref='list'>
-                    <li class='list-item' v-for='(item, index) in data' :key='index' v-text='item'></li>
-                </ul>
-            </slot>
-            <div class='pull-upload' v-if='pullUpLoad'>
-                <div class='txt' v-if='!isPullingUp' v-text='pullUpLoadTxt'>
-                </div>
-                <div v-else class='after-trigger'>
-                    <loading></loading>
-                </div>
-            </div>
-        </div>
-        <slot>
-            <div class='pull-down-wrapper' v-if='pullDownRefresh' :style='pullDownStyle'>
-                <div class='before-trigger' v-if='beforePullDown'>
-                    <span>before pull down</span>
-                </div>
-                <div class='after-trigger' v-else>
-                    <div v-if='pulling' class='loading'>
-                        <loading></loading>
-                    </div>
-                    <div class='rebounding' v-else>
-                        <span v-text='pullDownRefreshTxt'></span>
-                    </div>
-                </div>
-            </div>
-        </slot>
-    </div>
+  <div class='list-wrapper' ref='wrapper'>
+      <div class='scroll-content'>
+          <slot>
+              <ul ref='list' class='list-content'>
+                  <li class='list-item' v-for='(item, index) in data' :key='index' v-text='item'></li>
+              </ul>
+          </slot>
+          <slot name='pullUpLoad'>
+              <div class='pullUpLoad-wrapper' v-if='pullUpLoad'>
+                  <div class='before-trigger' v-if='!isPullingUpLoad'>
+                      <span v-text='pullUpLoadTxt'></span>
+                  </div>
+                  <div class='after-trigger' v-else>
+                      <loading></loading>
+                  </div>
+              </div>
+          </slot>
+      </div>
+      <slot name='pullDownRefresh'>
+          <div class='pullDownRefresh-wrapper' v-if='pullDownRefresh' :style='pullDownRefreshStyle'>
+              <div class='before-trigger' v-if='beforePullDown'>
+                  <span>before pull down</span>
+              </div>
+              <div v-else class='after-trigger'>
+                  <div v-if='pullingDown'>
+                      <loading></loading>
+                  </div>
+                  <div v-else>
+                      <span v-text='pullDownRefreshTxt'></span>
+                  </div>
+              </div>
+          </div>
+      </slot>
+  </div>
 </template>
 
 <script>
+const COMPONENT_NAME = 'scroll'
 import BetterScroll from 'better-scroll'
 import Loading from '../../components/loading/loading'
 import { getRect } from '../../commons/js/dom'
-const COMPONENT_NAME = 'scroll'
 
 export default {
     name: COMPONENT_NAME,
@@ -47,31 +50,40 @@ export default {
                 return []
             }
         },
+        probeType: {
+            type: Number,
+            default: 1
+        },
+        scrollX: {
+            type: Boolean,
+            default: false
+        },
+        scrollY: {
+            type: Boolean,
+            default: true
+        },
         freeScroll: {
             type: Boolean,
             default: false
         },
         click: {
             type: Boolean,
-            default: true
-        },
-        dblclick: {
-            type: null,
             default: false
         },
-        probeType: {
-            type: Number,
-            default: 1
-        },
         scrollbar: {
-            type: null,
-            default: true
-        },
-        pullUpLoad: {
             type: Boolean | Object,
             default: true
         },
         pullDownRefresh: {
+            type: null,
+            default: function () {
+                return {
+                    stop: 40,
+                    threshold: 90
+                }
+            }
+        },
+        pullUpLoad: {
             type: Boolean | Object,
             default: true
         },
@@ -82,22 +94,19 @@ export default {
     },
     data () {
         return {
-            isPullingUp: false,
-            pullUpDirty: true,
+            isPullingUpLoad: false,
             beforePullDown: true,
+            pullingDown: false,
             isPullingDown: false,
-            pulling: false,
             isRebounding: false,
-            pullDownStyle: ''
+            pullUpDirty: true,
+            pullDownRefreshStyle: ''
         }
-    },
-    created () {
-        this.pullDownInitTop = -10
     },
     computed: {
         pullUpLoadTxt () {
             const moreTxt = this.pullUpLoad && this.pullUpLoad.txt && this.pullUpLoad.txt.more || this.$i18n.t('scrollComponent.defaultLoadTxtMore')
-            const noMoreTxt = this.pullUpLoad && this.pullUpLoad.txt && this.pullUpLoad.txt.noMore || this.$i18n.t('scrollComponent.defaultLoadTxtNoMore')
+            const noMoreTxt =  this.pullUpLoad && this.pullUpLoad.txt && this.pullUpLoad.txt.noMore || this.$i18n.t('scrollComponent.defaultLoadTxtNoMore')
 
             return this.pullUpDirty ? moreTxt : noMoreTxt
         },
@@ -106,6 +115,91 @@ export default {
         }
     },
     methods: {
+        initScroll () {
+            if (!this.$refs.wrapper) {
+                return
+            }
+            if (this.$refs.list && (this.pullDownRefresh || this.pullUpLoad)) {
+                this.$refs.list.style.minHeight = `${ getRect(this.$refs.wrapper).height + 1 }px`
+            }
+            const options = {
+                probeType: this.probeType,
+                scrollX: this.scrollX,
+                scrollY: this.scrollY,
+                freeScroll: this.freeScroll,
+                click: this.click,
+                scrollbar: this.scrollbar,
+                pullDownRefresh: this.pullDownRefresh,
+                pullUpLoad: this.pullUpLoad
+            }
+            console.log('options: ', options)
+            this.scroll = new BetterScroll(this.$refs.wrapper, options)
+
+            if (this.pullDownRefresh) {
+                this.initPullDownRefresh()
+            }
+            if (this.pullUpLoad) {
+                this.initPullUpLoad()
+            }
+        },
+        initPullDownRefresh () {
+            this.scroll.on('pullingDown', () => {
+                this.beforePullDown = false
+                this.isPullingDown = true
+                this.pullingDown = true
+                this.$emit('pullingDown')
+            })
+
+            this.scroll.on('scroll', (pos) => {
+                if (this.beforePullDown) {
+                    this.pullDownRefreshStyle = `top: ${Math.min(10, pos.y + this.pullDownInitTop)}px`
+                }
+
+                if (this.isRebounding) {
+                    this.pullDownRefreshStyle = `top:${10 - (this.pullDownRefresh.stop - pos.y)}px`
+                }
+            })
+        },
+        initPullUpLoad () {
+            this.scroll.on('pullingUp', () => {
+                this.isPullingUpLoad = true
+                this.$emit('pullingUp')
+            })
+        },
+        forceUpdate (dirty) {
+            if (this.pullDownRefresh && this.isPullingDown) {
+                this.pullingDown = false
+                this.beforeReboundance().then(() => {
+                    this.afterReboundance()
+                })
+            } else if (this.pullUpLoad && this.isPullingUpLoad) {
+                this.isPullingUpLoad = false
+                this.pullUpDirty = dirty
+                this.finishPullUp()
+                this.refresh()
+            } else {
+                this.refresh()
+            }
+        },
+        beforeReboundance () {
+            const { stopTime = 600 } = this.pullDownRefresh            
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    this.isRebounding = true
+                    this.isPullingDown = false
+                    this.finishPullDown()
+                    resolve()
+                }, stopTime)
+            })
+        },
+        afterReboundance () {
+            setTimeout(() => {
+                this.isRebounding = false
+                this.beforePullDown = true
+                this.pullDownRefreshStyle = `top:${this.pullDownInitTop}px`
+                this.refresh()
+            }, this.scroll.options.bounceTime)
+        },
         refresh () {
             this.scroll && this.scroll.refresh()
         },
@@ -115,80 +209,18 @@ export default {
         finishPullDown () {
             this.scroll && this.scroll.finishPullDown()
         },
-        initScroll () {
-            if (!this.$refs.wrapper) {
-                return
-            }
-            
-            if (this.$refs.list && (this.pullUpLoad)) {
-                this.$refs.list.style.minHeight = `${getRect(this.$refs.wrapper).height + 1}px`
-            }
-            const options = {
-                freeScroll: this.freeScroll,
-                click: this.click,
-                dblclick: this.dblclick,
-                probeType: this.probeType,
-                scrollbar: this.scrollbar,
-                pullUpLoad: this.pullUpLoad,
-                pullDownRefresh: this.pullDownRefresh
-            }
-
-            this.scroll = new BetterScroll(this.$refs.wrapper, options)
-
-            if (this.pullUpLoad) {
-                this.initPullUpLoad()
-            }
-            if (this.pullDownRefresh) {
-                this.initPullDownRefresh()
-            }
-        },
-        initPullDownRefresh () {
-            this.scroll.on('pullingDown', (e) => {
-                this.beforePullDown = false
-                this.isPullingDown = true
-                this.pulling = true
-                this.$emit('pullingDown')
-            })
-        },
-        initPullUpLoad () {
-            this.scroll.on('pullingUp', (e) => {
-                this.isPullingUp = true
-                this.$emit('pullingUp')
-            })
-        },
-        forceUpdate (dirty) {
-            if (this.pullUpLoad && this.isPullingUp) {
-                this.isPullingUp = false
-                this.pullUpDirty = dirty
-                this.finishPullUp()
-            } else if (this.pullDonwRefresh && this.isPullingDown) {
-                this.pulling = false
-                this.beforeRebound().then(() => {
-                    this.afterRebound()
-                })
-            }
-            this.refresh()
-        },
-        beforeRebound () {
-            const { stopTime } = this.pullDonwRefresh
-            return new Promise((resolve) => {
-                setTimeout(() => {
-                    this.isRebounding = true
-                    this.isPullingDown = false
-                    this.pullDownStyle = { top: this.pullDownInitTop }
-                    resolve()
-                }, stopTime)
-            })
-        },
-        afterRebound () {
-            this.isRebounding = false
-            this.beforePullDown = true
-            this.finishPullDown()
-            this.refresh()
+        destroy () {
+            this.scroll && this.scroll.destroy()
         }
+    },
+    created () {
+        this.pullDownInitTop = -50
     },
     mounted () {
         this.initScroll()
+    },
+    beforeDestroy () {
+        this.destroy()
     },
     watch: {
         data (newVal) {
@@ -198,13 +230,13 @@ export default {
         }
     },
     components: {
-        'loading': Loading
+        Loading
     }
 }
 </script>
 
-<style lang='less' scoped>
-.list-wrapper {
+<style lang="less">
+  .list-wrapper {
     position: absolute;
     left: 0;
     top: 0;
@@ -212,36 +244,38 @@ export default {
     bottom: 0;
     overflow: hidden;
     background: #fff;
-    .scroll-content {
-        .list-content {
-            .list-item {
-                padding: .9375rem; /* 15/16 */
-                text-align: left;
-                border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-            }
-        }
-        .pull-upload {
-            width: 100%;
-            padding: 16px 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+    .list-content {
+      position: relative;
+      z-index: 10;
+      background: #fff;
+      .list-item {
+        height: 60px;
+        line-height: 60px;
+        font-size: 18px;
+        padding-left: 20px;
+        border-bottom: 1px solid #e5e5e5;
+      }
     }
-    .pull-down-wrapper {
-        position: absolute;
-        width: 100%;
-        left: 0;
-        top: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        .before-trigger {
-            margin-top: 10px;
-        }
-        .after-trigger {
-            margin-top: 10px;
-        }
+  }
+
+  .pullDownRefresh-wrapper {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all;
+    .after-trigger {
+      margin-top: 10px;
     }
-}
+  }
+
+  .pullUpLoad-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 16px 0;
+  }
 </style>

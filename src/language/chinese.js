@@ -36,7 +36,17 @@ export default {
     freeScrollPic: 'free-scroll.jpeg',
     formListPic: 'form-list.jpeg'
   },
-  
+
+  normalScrollListPage: {
+    desc: '基于 BScroll 实现垂直滚动列表组件',
+    scrollbar: '滚动条',
+    pullDownRefresh: '下拉刷新',
+    pullUpLoad: '上拉加载',
+    previousTxt: '我是第 ',
+    followingTxt: ' 行',
+    newDataTxt: '我是新数据: '
+  },
+
   scrollComponent: {
     defaultLoadTxtMore: '加载更多',
     defaultLoadTxtNoMore: '没有更多数据了',

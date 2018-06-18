@@ -3,13 +3,20 @@
     <optional-demo>
         <div slot='options'>
             <div class='group'>
-                <switch-option name='滚动条'></switch-option>
-                <switch-option name='fade' class='last'></switch-option>
+                <switch-option :name="$t('normalScrollListPage.scrollbar')" :value='scrollbar'
+                    @update:value='updateScrollbar'></switch-option>
+                <switch-option v-if='scrollbar' name='fade' class='last' :value='scrollbarFade'
+                    @update:value='updateScrollbarFade'></switch-option>
             </div>
             <div class='group'>
-                <switch-option name='下拉刷新'></switch-option>
-                <input-option name='threshold (≥ 40)' value='90'></input-option>
-                <input-option name='stop (≥ 40)' value='40' class='last'></input-option>
+                <switch-option :name="$t('normalScrollListPage.pullDownRefresh')" :value='pullDownRefresh'
+                    @update:value='updatePullDownRefresh'></switch-option>
+                <div v-if='pullDownRefresh'>
+                    <input-option name='threshold (≥ 40)' :value='threshold'
+                        :update:value='updateThreshold'></input-option>
+                    <input-option name='stop (≥ 40)' :value='stop' class='last'
+                        :update:value='updateStop'></input-option>
+                </div>
             </div>
             <div class='group'>
                 <switch-option name='上拉加载'></switch-option>
@@ -22,7 +29,10 @@
             </div>
         </div>
         <div slot='demo'>
-            <scroll :data='list' @pullingUp='onPullingUp'
+            <scroll ref='scroll'
+                :data='items' 
+                :scrollbar='scrollbarObj'
+                @pullingUp='onPullingUp'
                 @pullingDown='onPullingDown'></scroll>
         </div>
         <div slot='methods'>
@@ -39,6 +49,7 @@
 </template>
 
 <script>
+import Vue from 'vue'
 import OptionalDemo from '../../components/optional-demo/optional-demo'
 import SwitchOption from '../../components/switch-option/switch-option'
 import InputOption from '../../components/input-option/input-option'
@@ -48,32 +59,91 @@ import Scroll from '../../components/scroll/scroll'
 export default {    
     data () {
         return {
-            list: [
-                'I am the No.1 line',
-                'I am the No.2 line',
-                'I am the No.3 line',
-                'I am the No.4 line'
-            ]
+            scrollbar: true,
+            scrollbarFade: true,
+            pullDownRefresh: true,
+            threshold: 90,
+            stop: 40,
+            items: [],
+            itemIndex: 0
+        }
+    },
+    computed: {
+        scrollbarObj () {
+            return this.scrollbar ? {fade: this.scrollbarFade} : false
+        },
+        pullDownRefreshObj () {
+            return this.pullDownRefresh ? {
+                threshold: this.threshold,
+                stop: this.stop
+            } : false
+        }
+    },
+    created () {
+        for (let i = 0; i < 2; i++) {
+            this.items.push(`${this.$i18n.t('normalScrollListPage.previousTxt')} ${ (++this.itemIndex) } ${ this.$i18n.t('normalScrollListPage.followingTxt') }`)
         }
     },
     methods: {
         onPullingUp () {
             setTimeout(() => {
-                const len = this.list.length
-                for (let i = 0; i < 2; i++) {
-                    this.list.push(`I am the No.${i + len + 1}`)
+                if (Math.random() > 0.5) {
+                    // 如果有新的数据
+                    for (let i = 0; i < 2; i++) {
+                        this.items.push(`${ this.$i18n.t('normalScrollListPage.previousTxt') } ${ ++this.itemIndex } ${ this.$i18n.t('normalScrollListPage.followingTxt') }`)
+                    }
+                } else {
+                    // 如果没有新的数据
+                    this.$refs.scroll.forceUpdate()
                 }
             }, 1000)
         },
         onPullingDown () {
-            console.log('onPullingDown')
             setTimeout(() => {
-                const len = this.list.length
-                for (let i = 0; i < 2; i++) {
-                    this.list.unshift(`I am the No.${i + len + i}`)
+                if (Math.random() >= 0) {
+                    // 如果有新的数据
+                    this.items.unshift(`${ this.$i18n.t('normalScrollListPage.newDataTxt')}`)
+                } else {
+                    // 如果没有数据
+                    this.$refs.scroll.forceUpdate()
                 }
-            }, 1000090)
+            }, 1000)
+        },
+        updateScrollbar (val) {
+            this.scrollbar = val
+        },
+        updateScrollbarFade (val) {
+            this.scrollbarFade = val
+        },
+        updatePullDownRefresh (val) {
+            this.pullDownRefresh = val
+        },
+        updateThreshold (val) {
+            this.threshold = val
+        },
+        updateStop (val) {
+            this.stop = val
+        },
+        rebuildScroll () {
+            Vue.nextTick(() => {
+                this.$refs.scroll.destroy()
+                this.$refs.scroll.initScroll()
+            })
         }
+    },
+    watch: {
+       scrollbarObj: {
+           handler () {
+               this.rebuildScroll()
+           },
+           deep: true
+       },
+       pullDownRefreshObj: {
+           handler () {
+               this.rebuildScroll()
+           },
+           deep: true
+       }
     },
     components: {
         "optional-demo": OptionalDemo,
