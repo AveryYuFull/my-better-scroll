@@ -54,6 +54,10 @@ export default {
             type: Number,
             default: 1
         },
+        startY: {
+            type: Number,
+            default: 0
+        },
         scrollX: {
             type: Boolean,
             default: false
@@ -124,6 +128,7 @@ export default {
             }
             const options = {
                 probeType: this.probeType,
+                startY: this.startY,
                 scrollX: this.scrollX,
                 scrollY: this.scrollY,
                 freeScroll: this.freeScroll,
@@ -211,6 +216,9 @@ export default {
         },
         destroy () {
             this.scroll && this.scroll.destroy()
+        },
+        scrollTo () {
+            this.scroll && this.scroll.scrollTo.apply(this.scroll, arguments)
         }
     },
     created () {
@@ -254,6 +262,7 @@ export default {
         font-size: 18px;
         padding-left: 20px;
         border-bottom: 1px solid #e5e5e5;
+        text-align: left;
       }
     }
   }

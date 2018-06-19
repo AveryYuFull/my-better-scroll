@@ -12,36 +12,50 @@
                 <switch-option :name="$t('normalScrollListPage.pullDownRefresh')" :value='pullDownRefresh'
                     @update:value='updatePullDownRefresh'></switch-option>
                 <div v-if='pullDownRefresh'>
-                    <input-option name='threshold (≥ 40)' :value='threshold'
-                        :update:value='updateThreshold'></input-option>
-                    <input-option name='stop (≥ 40)' :value='stop' class='last'
-                        :update:value='updateStop'></input-option>
+                    <input-option name='threshold (≥ 40)' :value='pullDownRefreshThreshold'
+                        :update:value='updatePullDownRefreshThreshold'></input-option>
+                    <input-option name='stop (≥ 40)' :value='pullDownRefreshStop' class='last'
+                        :update:value='updatePullDownRefreshStop'></input-option>
                 </div>
             </div>
             <div class='group'>
-                <switch-option name='上拉加载'></switch-option>
-                <input-option name='threshold'></input-option>
-                <input-option name='moreTxt' value='加载更多'></input-option>
-                <input-option name='noMoreTxt' value='没有更多数据了' class='last'></input-option>
+                <switch-option :name="$t('normalScrollListPage.pullUpLoad')" :value='pullUpLoad'
+                    @update:value='updatePullUpLoad'></switch-option>
+                <div v-if='pullUpLoad'>
+                    <input-option name='threshold' :value='pullUpLoadThreshold'
+                        @update:value='updatePullUpLoadThreshold'></input-option>
+                    <input-option name='moreTxt' :value='moreTxt'
+                        @update:value='updateMoreTxt'></input-option>
+                    <input-option name='noMoreTxt' :value='noMoreTxt' class='last'
+                        @update:value='updateNoMoreTxt'></input-option>
+                </div>
             </div>
             <div class='group'>
-                <input-option name='startY' class='last'></input-option>
+                <input-option name='startY' class='last' :value='startY'
+                    @update:value='updateStartY'></input-option>
             </div>
         </div>
         <div slot='demo'>
             <scroll ref='scroll'
                 :data='items' 
                 :scrollbar='scrollbarObj'
+                :pullDownRefresh='pullDownRefreshObj'
+                :pullUpLoad='pullUpLoadObj'
+                :startY='parseInt(startY)'
                 @pullingUp='onPullingUp'
                 @pullingDown='onPullingDown'></scroll>
         </div>
         <div slot='methods'>
             <div class='group'>
-                <input-option name='x' value='0'></input-option>
-                <input-option name='y' value='-200'></input-option>
-                <input-option name='time' value='700'></input-option>
-                <select-option name='easing'></select-option>
-                <button class='scrollBtn'>ScrollTo</button>
+                <input-option name='x' :value='scrollToX'
+                    @update:value='updateScrollToX'></input-option>
+                <input-option name='y' :value='scrollToY'
+                    @update:value='updateScrollToY'></input-option>
+                <input-option name='time' :value='scrollToTime'
+                    @update:value='updateScrollToTime'></input-option>
+                <select-option name='easing' :value='scrollToEasing' :options='scrollToEasingOptions'
+                    @update:value='updateScrollToEasing'></select-option>
+                <button class='scrollBtn' @click='scrollTo'>ScrollTo</button>
             </div>
         </div>
     </optional-demo>
@@ -56,14 +70,26 @@ import InputOption from '../../components/input-option/input-option'
 import SelectOption from '../../components/select-option/select-option'
 import Scroll from '../../components/scroll/scroll'
 
+import { ease } from '../../commons/js/ease'
+
 export default {    
     data () {
         return {
             scrollbar: true,
             scrollbarFade: true,
             pullDownRefresh: true,
-            threshold: 90,
-            stop: 40,
+            pullDownRefreshThreshold: 90,
+            pullDownRefreshStop: 40,
+            pullUpLoad: true,
+            pullUpLoadThreshold: 0,
+            moreTxt: '加载更多',
+            noMoreTxt: '没有更多数据了',
+            startY: 0,
+            scrollToX: 0,
+            scrollToY: -200,
+            scrollToTime: 700,
+            scrollToEasing: 'bounce',
+            scrollToEasingOptions: ['bounce', 'swipe', 'swipeBounce'],
             items: [],
             itemIndex: 0
         }
@@ -74,8 +100,17 @@ export default {
         },
         pullDownRefreshObj () {
             return this.pullDownRefresh ? {
-                threshold: this.threshold,
-                stop: this.stop
+                threshold: this.pullDownRefreshThreshold,
+                stop: this.pullDownRefreshStop
+            } : false
+        },
+        pullUpLoadObj () {
+            return this.pullUpLoad ? {
+                threshold: this.pullUpLoadThreshold,
+                txt: {
+                    more: this.moreTxt,
+                    noMore: this.noMoreTxt
+                }
             } : false
         }
     },
@@ -100,7 +135,7 @@ export default {
         },
         onPullingDown () {
             setTimeout(() => {
-                if (Math.random() >= 0) {
+                if (Math.random() >= 0.5) {
                     // 如果有新的数据
                     this.items.unshift(`${ this.$i18n.t('normalScrollListPage.newDataTxt')}`)
                 } else {
@@ -118,11 +153,41 @@ export default {
         updatePullDownRefresh (val) {
             this.pullDownRefresh = val
         },
-        updateThreshold (val) {
-            this.threshold = val
+        updatePullDownRefreshThreshold (val) {
+            this.pullDownRefreshThreshold = val
         },
-        updateStop (val) {
-            this.stop = val
+        updatePullDownRefreshStop (val) {
+            this.pullDownRefreshStop = val
+        },
+        updatePullUpLoad (val) {
+            this.pullUpLoad = val
+        },
+        updatePullUpLoadThreshold (val) {
+            this.pullUpLoadThreshold = val
+        },
+        updateMoreTxt (val) {
+            this.moreTxt = val
+        },
+        updateNoMoreTxt (val) {
+            this.noMoreTxt = val
+        },
+        updateStartY (val) {
+            this.startY = val
+        },
+        updateScrollToX (val) {
+            this.scrollToX = val
+        },
+        updateScrollToY (val) {
+            this.scrollToY = val
+        },
+        updateScrollToTime (val) {
+            this.scrollToTime = val
+        },
+        updateScrollToEasing (val) {
+            this.scrollToEasing = val
+        },
+        scrollTo () {
+            this.$refs.scroll.scrollTo(this.scrollToX, this.scrollToY, this.scrollToTime, ease[this.scrollToEasing])
         },
         rebuildScroll () {
             Vue.nextTick(() => {
@@ -143,6 +208,15 @@ export default {
                this.rebuildScroll()
            },
            deep: true
+       },
+       pullUpLoadObj: {
+           handler () {
+               this.rebuildScroll()
+           },
+           deep: true
+       },
+       startY () {
+           this.rebuildScroll()
        }
     },
     components: {
