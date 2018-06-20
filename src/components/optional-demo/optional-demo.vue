@@ -1,7 +1,7 @@
 <template>
     <div class='page'>
         <header class='header'>
-            <img class='back' :src='backIcon' alt='back' />
+            <img class='back' :src='backIcon' alt='back'  @click='back' />
             <h1>普通 Scroll 组件</h1>
         </header>
         <div ref='wrapper' class='page-content'>
@@ -40,20 +40,16 @@ export default {
         return {
             backIcon
         }
+    },
+    methods: {
+        back () {
+            this.$router.back()
+        }
     }
 }
 </script>
 
-<style lang='less'>
-.view {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: #fff;
-    z-index: 99;
-}
+<style lang='less' scoped>
 .page {
     font-weight: normal;    
     .header {
@@ -61,6 +57,8 @@ export default {
         line-height: 44px;
         height: 44px;
         box-shadow: 0 1px 6px #ccc;
+        display: flex;
+        justify-content: space-around;
         h1 {
             margin: 0;
             font-size: 16px;

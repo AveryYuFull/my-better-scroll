@@ -1,16 +1,16 @@
 <template>
-  <div id="app">
+  <div id='app'>
     <section class='page-header'>
       <nav class='nav'>
         <div class='left'>
           <router-link :to='lang' class='brand'>BetterScroll</router-link>
-          <a class='tab' href='https://ustbhuangyi.github.io/better-scroll/doc/' target='_blank'>{{ $t('navigator.doc') }}</a>
-          <router-link :to='examplesPath' class='tab'>{{ $t('navigator.demo') }}</router-link>
+          <a class='tab' href='https://ustbhuangyi.github.io/better-scroll/doc/' v-text="$t('navigator.doc')" target='_blank'></a>
+          <router-link :to='examplesPath' class='tab' v-text="$t('navigator.demo')"></router-link>
         </div>
         <div class='right'>
-          <span class='tab language-wrapper'>
-            <span @click='toogleLanguage'>Language</span>
-            <ul class='option-wrapper' v-show='showLanguage'>
+          <span class='tab language-wrapper' @click='toggleLanguage'>
+            <span>Language</span>
+            <ul class='options-wrapper' v-if='showLanguage'>
               <li @click="chooseLanguage('en')">English</li>
               <li @click="chooseLanguage('zh')">中文</li>
             </ul>
@@ -22,8 +22,8 @@
       </nav>
       <h1 class='project-name'>BetterScroll</h1>
       <h2 class='project-tagline'>inspired by iscroll, and it has a better scroll perfermance</h2>
-      <a class='btn' href='https://ustbhuangyi.github.io/better-scroll/doc/' target='_blank'>{{ $t('navigator.started') }}</a>
-      <router-link :to='examplesPath' class='btn'>{{ $t('navigator.demo') }}</router-link>
+      <a href='https://ustbhuangyi.github.io/better-scroll/doc/' class='btn' v-text="$t('navigator.started')" target='_blank'></a>
+      <router-link class='btn' v-text="$t('navigator.demo')" :to='examplesPath'></router-link>
     </section>
     <section class='main-content'>
       <transition name='fade'>
@@ -34,21 +34,18 @@
       <span class='site-footer-owner'>
         <a href='https://github.com/ustbhuangyi/picker'>BetterScroll</a>
         is maintained by
-        <a href='https://github.com/ustbhuangyi'>ustbhuangyi</a>.
+        <a href='https://github.com/ustbhuangyi'>ustbhuangyi</a>
       </span>
     </footer>
   </div>
 </template>
 
 <script>
-import githubIcon from './commons/images/github.svg'
-
 export default {
-  name: 'App',
   data () {
     return {
-      githubIcon: githubIcon,
-      showLanguage: false
+      showLanguage: false,
+      githubIcon: require('./commons/images/github.svg')
     }
   },
   computed: {
@@ -59,102 +56,112 @@ export default {
       return '/examples/' + this.$i18n.locale
     }
   },
-  created () {
-    this.$i18n.locale = this.$route.params.lang === 'zh' ? 'zh' : 'en'
-  },
   methods: {
+    toggleLanguage () {
+      this.showLanguage = !this.showLanguage
+    },
     chooseLanguage (lang) {
       if (this.$route.params.lang !== lang) {
         this.$i18n.locale = lang
-        let newPath = this.$route.path.substring(0, -2) + lang
+        const newPath = this.$route.path.substring(0, -2) + lang
         this.$router.replace(newPath)
       }
-    },
-    toogleLanguage () {
-      this.showLanguage = !this.showLanguage
     }
+  },
+  created () {
+    this.$i18n.locale = this.$route.params.lang === 'en' ? 'en' : 'zh'
   }
 }
 </script>
 
 <style lang='less' scoped>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  font-weight: 600;
-  .page-header {
-    background: linear-gradient(120deg, #E55D87, #5FC3E4);
-    color: #fff;
-    padding: 1.5rem 4rem 2rem 4rem;
-    a {
-      color: #fff;
-      text-decoration: none;
+@import './commons/less/variable.less';
+
+.page-header {
+  .nav {
+    margin-bottom: 1.5rem;
+    line-height: 1.6rem;
+    display: flex;
+    justify-content: space-between;
+    @media screen and (min-width: 42rem) {
+      margin-bottom: 4rem;
     }
-    .nav {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    @media screen and (max-width: 42rem) {
       margin-bottom: 3rem;
-      .tab {
+    }
+    .tab {
+      padding-bottom: 5px;
+      @media screen and (min-width: 42rem) {
         margin-right: 1rem;
-        &:hover {
-          box-shadow: 0 3px 0 rgba(255, 255, 255, 0.5);
-          cursor: pointer;
-        }
       }
-      .left {
-        .brand {
-          font-size: 20px;
+      @media screen and (max-width: 42rem) {
+        margin-right: 0.4rem
+      }
+      &:hover {
+        box-shadow: 0 3px 0 rgba(255, 255, 255, 0.5);
+        cursor: pointer;
+      }
+    }
+    .language-wrapper {
+      position: relative;
+      .options-wrapper {
+        position: absolute;
+        width: 100%;
+        left: 0;
+        top: 2rem;
+        line-height: 2rem;
+      }
+    }
+    a {
+      color: @color-white;
+      &:hover {
+        text-decoration: none;
+      }
+    }
+
+    .left {
+      .brand {
+        font-size: @fontsize-large-xx;
+        @media screen and (min-width: 42rem) {
           margin-right: 3rem;
         }
-      }
-      .right {
-        .language-wrapper {
-          position: relative;
-          .option-wrapper {
-            list-style-type: none;
-            position: absolute;
-            top: 1.875rem /* 30/16 */;
-            left: .625rem /* 10/16 */;
-            margin: 0;
-            padding: 0;
-            line-height: 30px;
-          }
-        }
-        img {
-          width: 1.2rem;
+        @media screen and (max-width: 42rem) {
+          margin-right: 1rem;
         }
       }
     }
-    .project-name {
-      font-size: 2.25rem;
+    .right {
+      img {
+        width: 1.2rem;
+        position: relative;
+        top: 0.2rem;
+      }
+    }
+  }
+  h1 {
+    @media screen and (min-width: 42rem) {
       margin-bottom: 1rem;
-      text-align: center;
     }
-    .project-tagline {
-      margin-bottom: 1rem;
-      font-weight: normal;
-      opacity: 0.7;
-      font-size: 1.15rem;
+    @media screen and (max-width: 42rem) {
+      margin-bottom: 0.5rem;
     }
   }
-
-  .main-content {
-    padding: 2rem 2rem;
-    font-size: 1.1rem;
+  .btn {
+    min-width: 7rem;
   }
-
-  .site-footer {
-    font-size: 1rem;
-    padding-top: 2rem;
-    margin-top: 2rem;
-    border-top: 1px solid #d7d7d7;
-    .site-footer-owner {
-      font-weight: bold;
+}
+.main-content {
+  .view {
+    transition: all 0.4s ease-in-out;
+    &.fade-enter-active, &.fade-leave-active {
+      opacity: 0.01;
+    }
+    &.fade-enter, &.fade-leave {
+      transition: opacity 0.4s;
     }
   }
+}
+.site-footer {
+  text-align: center;
 }
 </style>

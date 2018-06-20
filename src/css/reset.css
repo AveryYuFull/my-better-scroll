@@ -15,10 +15,12 @@
  figure, figcaption, footer, header,
  menu, nav, output, ruby, section, summary,
  time, mark, audio, video, input {
-     margin: 0;
-     padding: 0;
-     border: 0;
-     vertical-align: baseline;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font-weight: normal;
+    vertical-align: baseline;
  }
  
  /* HTML5 display-role reset for older browsers */

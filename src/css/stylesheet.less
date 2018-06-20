@@ -13,12 +13,106 @@
         background-color: rgba(255, 255, 255, 0.2);
         border-color: rgba(255, 255, 255, 0.3);
     }
+    @media screen and (min-width: 42rem) and (max-width: 64rem) {
+        font-size: 0.9rem;
+    }
+    @media screen and (max-width: 42rem) {
+        display: block;
+        padding: 0.75rem;
+        font-size: 0.9rem;
+    }
 }
 .btn + .btn {
     margin-left: 1rem;
+    @media screen and (max-width: 42rem) {
+        margin-top: 1rem;
+        margin-left: 0;
+    }
 }
 
 a {
     color: #1e6bb8;
     text-decoration: none;
+}
+
+.page-header {
+    color: #fff;
+    text-align: center;
+    background: linear-gradient(120deg, #E55D87, #5FC3E4);
+    @media screen and (min-width: 64rem) {
+        padding: 1.5rem 6rem 3rem 6rem;
+    }
+    @media screen and (max-width: 64rem) and (min-width: 42rem) {
+        padding: 1.5rem 4rem 2rem 4rem;
+    }
+    @media screen and (max-width: 42rem) {
+        padding: 1.5rem 1rem 1rem 1rem;
+    }
+}
+
+.project-name {
+    margin-top: 0;
+    margin-bottom: 0.1rem;
+    
+    @media screen and (min-width: 64rem) {
+        font-size: 3.25rem;
+    }
+    @media screen and (min-width: 42rem) and (max-width: 64rem) {
+        font-size: 2.25rem;
+    }
+    @media screen and (max-width: 42rem) {
+        font-size: 1.75rem;
+    }
+}
+
+.project-tagline {
+    margin-bottom: 1rem;
+    font-weight: normal;
+    opacity: 0.7;
+    
+    @media screen and (min-width: 64rem) {
+        font-size: 1.25rem;
+    }
+    @media screen and (min-width: 42rem) and (max-width: 64rem) {
+        font-size: 1.15rem;
+    }
+    @media screen and (max-width: 42rem) {
+        font-size: 1rem;
+    }
+}
+
+.main-content {
+    @media screen and (min-width: 64rem) {
+        padding: 2rem 8rem 0 8rem;
+        margin: 0 auto;
+        font-size: 1.1rem;
+    }
+    @media screen and (min-width: 42rem) and (max-width: 64rem) {
+        padding: 2rem 2rem 0 2rem;
+        font-size: 1.1rem;
+    }
+    @media screen and (max-width: 42rem) {
+        padding: 1rem 1rem 0 1rem;
+        font-size: 1rem;
+    }
+}
+
+.site-footer {
+    padding-top: 2rem;
+    margin-top: 2rem;
+    border-top: 1px solid #d7d7d7;
+    padding-bottom: 2rem;
+    .site-footer-owner {
+        display: block;
+        font-weight: bold;
+    }
+    @media screen and (min-width: 64rem) {
+        font-size: 1rem;
+    }
+    @media screen and (min-width: 42rem) and (max-width: 64rem) {
+        font-size: 1rem;
+    }
+    @media screen and (max-width: 42rem) {
+        font-size: 0.9rem;
+    }
 }
