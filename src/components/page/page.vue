@@ -1,12 +1,12 @@
 <template>
     <div class='page'>
         <header class='header'>
-            <img :src='backIcon' class='back' alt='back' />
+            <img :src='backIcon' class='back' alt='back' @click='back' />
             <div class='title' v-text='title'></div>
         </header>
         <div class='wrapper'>
             <section v-show='desc' class='desc'>
-                <slot name='desc' v-text='desc'></slot>
+                <slot name='desc'>{{ desc }}</slot>
             </section>
             <main class='content'>
                 <slot name='content' v-text='content'></slot>
@@ -34,6 +34,11 @@ export default {
     data () {
         return {
             backIcon: require('../../commons/images/back.svg')
+        }
+    },
+    methods: {
+        back () {
+            this.$router.back()
         }
     }
 }
@@ -63,6 +68,14 @@ export default {
             color: @color-main;
             font-size: 16px;
         }
+    }
+    .wrapper {
+       .desc {
+           padding: 20px;
+           line-height: 20px;
+           font-size: 14px;
+           color: #606c71;
+       } 
     }
 }
 </style>

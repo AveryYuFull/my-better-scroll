@@ -33,7 +33,7 @@ export default {
         }, {
             img: 'pickerPic',
             title: 'picker',
-            path: ''
+            path: '/examples/picker/' + this.$i18n.locale
         }, {
             img: 'slidePic',
             title: 'slide',

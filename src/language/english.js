@@ -54,5 +54,17 @@ export default {
 
   indexListPage: {
     title: 'Current City: Beijing'
+  },
+
+  pickerPage: {
+    desc: 'Picker is a typical choose component at mobile end. And it could dynamic change the data of every column to realize linkage picker.',
+    picker: ' picker',
+    pickerDemo: ' picker demo ...',
+    oneColumn: 'One column',
+    twoColumn: 'Two column',
+    threeColumn: 'Three column',
+    linkage: 'Linkage',
+    confirmTxt: 'confirm | ok',
+    cancelTxt: 'cancel | close'
   }
 }

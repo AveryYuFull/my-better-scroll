@@ -4,6 +4,7 @@ import Features from '../pages/features'
 import Examples from '../pages/examples'
 import VerticalScroll from '../pages/vertical-scroll'
 import IndexList from '../pages/index-list'
+import Picker from '../pages/picker'
 
 Vue.use(Router)
 
@@ -34,6 +35,10 @@ export default new Router({
         {
           path: 'index-view/:lang',
           component: IndexList
+        },
+        {
+          path: 'picker/:lang',
+          component: Picker
         }
       ]
     }
