@@ -80,20 +80,19 @@ export default {
         },
         pullDownRefresh: {
             type: null,
-            default: function () {
-                return {
-                    stop: 40,
-                    threshold: 90
-                }
-            }
+            default: false
         },
         pullUpLoad: {
             type: Boolean | Object,
-            default: true
+            default: false
         },
         refreshDelay: {
             type: Number,
             default: 20
+        },
+        listenScroll: {
+            type: Boolean,
+            default: false
         }
     },
     data () {
@@ -137,7 +136,6 @@ export default {
                 pullDownRefresh: this.pullDownRefresh,
                 pullUpLoad: this.pullUpLoad
             }
-            console.log('options: ', options)
             this.scroll = new BetterScroll(this.$refs.wrapper, options)
 
             if (this.pullDownRefresh) {
@@ -145,6 +143,12 @@ export default {
             }
             if (this.pullUpLoad) {
                 this.initPullUpLoad()
+            }
+
+            if (this.listenScroll) {
+                this.scroll.on('scroll', (pos) => {
+                    this.$emit('scroll', pos)
+                })
             }
         },
         initPullDownRefresh () {
@@ -219,6 +223,9 @@ export default {
         },
         scrollTo () {
             this.scroll && this.scroll.scrollTo.apply(this.scroll, arguments)
+        },
+        scrollToElement () {
+            this.scroll && this.scroll.scrollToElement.apply(this.scroll, arguments)
         }
     },
     created () {

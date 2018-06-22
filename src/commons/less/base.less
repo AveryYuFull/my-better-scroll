@@ -1,0 +1,21 @@
+@import './variable.less';
+
+.border-top-1px, .border-right-1px, .border-bottom-1px, .border-left-1px {
+    position: relative;
+    &:before, &:after {
+        content: '';
+        display: block;
+        position: absolute;
+        transform-origin: 0 0;
+    }
+}
+
+.border-bottom-1px {
+    &:after {
+        border-bottom: 1px solid @color-row-line;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        transform-origin: 0 bottom;
+    }
+}

@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Features from '../pages/features'
 import Examples from '../pages/examples'
 import VerticalScroll from '../pages/vertical-scroll'
+import IndexList from '../pages/index-list'
 
 Vue.use(Router)
 
@@ -29,6 +30,10 @@ export default new Router({
         {
           path: 'vertical-scroll/:lang',
           component: VerticalScroll
+        },
+        {
+          path: 'index-view/:lang',
+          component: IndexList
         }
       ]
     }

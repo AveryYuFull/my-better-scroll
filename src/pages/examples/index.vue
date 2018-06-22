@@ -29,7 +29,7 @@ export default {
         }, {
             img: 'indexListPic',
             title: 'indexList',
-            path: ''
+            path: '/examples/index-view/' + this.$i18n.locale
         }, {
             img: 'pickerPic',
             title: 'picker',
