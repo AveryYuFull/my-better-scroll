@@ -1,10 +1,10 @@
 <template>
-    <page title='索引列表'>
+    <page :title="$t('examples.indexList')">
         <div slot='content'>
             <div class='split'></div>
             <div class='view-wrapper'>
                 <div class='index-list-wrapper'>
-                    <index-list :data='data'></index-list>
+                    <index-list :data='data' :title='title'></index-list>
                 </div>
             </div>
         </div>
@@ -19,7 +19,8 @@ import cityData from '../../data/index-list.json'
 export default {
     data () {
         return {
-            cityData: []
+            cityData: [],
+            title: this.$i18n.t('indexListPage.title')
         }
     },
     computed: {

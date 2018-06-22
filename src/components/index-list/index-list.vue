@@ -56,7 +56,7 @@ export default {
         },
         title: {
             type: String,
-            default: 'Current City: Beijing'
+            default: ''
         }
     },
     data () {

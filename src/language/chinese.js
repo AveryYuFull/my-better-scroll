@@ -52,4 +52,8 @@ export default {
     defaultLoadTxtNoMore: '没有更多数据了',
     defaultRefreshTxt: '刷新成功'
   },
+  
+  indexListPage: {
+    title: '当前城市: 北京市'
+  }
 }

@@ -50,5 +50,9 @@ export default {
     defaultLoadTxtMore: 'Load more',
     defaultLoadTxtNoMore: 'There is no more data',
     defaultRefreshTxt: 'Refresh success'
+  },
+
+  indexListPage: {
+    title: 'Current City: Beijing'
   }
 }
