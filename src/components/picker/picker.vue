@@ -1,12 +1,12 @@
 <template>
     <transition name='picker-fade'>
-        <div class='picker' v-show='state === 1'>
+        <div class='picker' v-show='state === 1' @click.stop.prevent='cancel'>
             <transition name='picker-move'>
-                <div class='picker-panel' v-show='state === 1'>
+                <div class='picker-panel' v-show='state === 1' @click.stop.prevent>
                     <div class='picker-choose border-bottom-1px'>
-                        <div class='cancelBtn' v-text='cancelTxt'></div>
+                        <div class='cancelBtn' v-text='cancelTxt' @click='cancel'></div>
                         <div class='title' v-text='title'></div>
-                        <div class='confirmBtn' v-text='confirmTxt'></div>
+                        <div class='confirmBtn' v-text='confirmTxt' @click='confirm'></div>
                     </div>
                     <div class='picker-content'>
                         <div class='mask-top border-bottom-1px'></div>
@@ -34,6 +34,9 @@ const COMPONENT_NAME = 'picker'
 const STATE_SHOW = 1
 const STATE_HIDDEN = 0
 const EVENT_CHANGE = 'change'
+const EVENT_SELECT = 'select'
+const EVENT_VALUE_CHANGE = 'valueChange'
+const EVENT_CANCEL = 'cancel'
 
 export default {
     name: COMPONENT_NAME,
@@ -67,15 +70,13 @@ export default {
         return {
             state: STATE_HIDDEN,
             pickerData: this.data.slice(),
-            pickerSelectedIndex: this.selectedIndex
+            pickerSelectedIndex: this.selectedIndex,
+            pickerSelectedVal: [],
+            pickerSelectedText: []
         }
     },
     methods: {
-        show () {
-            if (this.state) {
-                return
-            }
-            this.state = STATE_SHOW
+        initWheel () {
             if (!this.wheels || this.dirty) {
                 this.$nextTick(() => {
                     const wheelWrapper = this.$refs.wheelWrapper
@@ -91,6 +92,13 @@ export default {
                 }
             }
         },
+        show () {
+            if (this.state) {
+                return
+            }
+            this.state = STATE_SHOW
+            this.initWheel()
+        },
         _createWheels (wheelWrapper, i) {
             if (!this.wheels) {
                 this.wheels = []
@@ -105,12 +113,66 @@ export default {
                     probeType: 3
                 })
                 this.wheels[i].on('scrollEnd', () => {
+                    this.pickerSelectedIndex[i] = this.wheels[i].getSelectedIndex()
                     this.$emit(EVENT_CHANGE, i, this.wheels[i].getSelectedIndex())
                 })
             } else {
                 this.wheels[i].refresh()
             }
             return this.wheels[i]
+        },
+        cancel () {
+            this.hide()
+            this.$emit(EVENT_CANCEL)
+        },
+        confirm () {
+            if (!this._canConfirm()) {
+                return
+            }
+            let change = false
+            for (let i = 0; i < this.pickerData.length; i++) {
+                let index = this.wheels[i].getSelectedIndex()
+                let value = this.pickerData[i][index].value
+                if (this.pickerSelectedVal[i] !== value) {
+                    change = true
+                }
+                this.pickerSelectedIndex[i] = index
+                this.pickerSelectedText[i] = this.pickerData[i][index].text
+                this.pickerSelectedVal[i] = value
+            }
+            this.$emit(EVENT_SELECT, this.pickerSelectedIndex, this.pickerSelectedVal, this.pickerSelectedText)
+            if (change) {
+                this.$emit(EVENT_VALUE_CHANGE, this.pickerSelectedIndex, this.pickerSelectedVal, this.pickerSelectedText)
+            }
+            this.hide()
+        },
+        _canConfirm () {
+            return this.wheels.every((wheel, index) => {
+                return !wheel.isInTransition
+            })
+        },
+        hide () {
+            this.state = STATE_HIDDEN
+            for (let i = 0; i < this.wheels.length; i++) {
+                this.wheels[i].disable()
+            }
+        },
+        setData (data) {
+            this.pickerData = data.slice()
+            this.dirty = true
+            this.initWheel()
+        },
+        scrollTo (i, dist) {
+            const wheel = this.wheels[i]
+            this.pickerSelectedIndex[i] = dist
+            wheel.wheelTo(dist)
+        },
+        refresh () {
+            setTimeout(() => {
+                this.wheels.forEach ((wheel, index) => {
+                    wheel.refresh()
+                })
+            }, 200)
         }
     },
     created () {
@@ -122,6 +184,14 @@ export default {
         }
         this.wheels = null // 每一个齿轮
         this.dirty = true // 是否有数据改动，如果数据改动了，就设置为true，否则设置为false
+    },
+    mounted () {
+        console.log('data: ', this.data)
+    },
+    watch: {
+        data (newVal) {
+            this.setData(newVal)
+        }
     }
 }
 </script>
@@ -142,6 +212,12 @@ export default {
     text-align: center;
     font-size: @fontsize-medium;
     background: @color-mask-bgc;
+    &.picker-fade-enter, &.picker-fade-leave-active {
+      opacity: 0
+    }
+    &.picker-fade-enter-active, &.picker-fade-leave-active {
+      transition: all .3s ease-in-out
+    }
     .picker-panel {
         position: absolute;
         bottom: 0;
@@ -149,6 +225,12 @@ export default {
         width: 100%;
         height: 273px;
         background-color: @color-white;
+        &.picker-move-enter, &.picker-move-leave-active {
+            transform: translate3d(0, 273px, 0)
+        }
+        &.picker-move-enter-active, &.picker-move-leave-active {
+            transition: all .3s ease-in-out
+        }
         .picker-choose {
             display: flex;
             justify-content: space-between;

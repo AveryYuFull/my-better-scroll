@@ -44,5 +44,46 @@
     }, {
         "text": "斯拉达",
         "value": 1
+    }],
+    "data2":[{
+        "text": "输出",
+        "value": "a"
+    }, {
+        "text": "控制",
+        "value": "b"
+    }, {
+        "text": "核心",
+        "value": "c"
+    }, {
+        "text": "爆发",
+        "value": "d"
+    }, {
+        "text": "辅助",
+        "value": "e"
+    }, {
+        "text": "打野",
+        "value": "f"
+    }, {
+        "text": "逃生",
+        "value": "g"
+    }],
+    "data3": [{
+        "text": "梅肯",
+        "value": "s"
+    }, {
+        "text": "秘法鞋",
+        "value": "ss"
+    }, {
+        "text": "假腿",
+        "value": "sss"
+    }, {
+        "text": "飞鞋",
+        "value": "ssss"
+    }, {
+        "text": "辉耀",
+        "value": "sssss"
+    }, {
+        "text": "金箍棒",
+        "value": "ssssss"
     }]
 }
