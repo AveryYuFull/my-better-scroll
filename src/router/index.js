@@ -5,6 +5,7 @@ import Examples from '../pages/examples'
 import VerticalScroll from '../pages/vertical-scroll'
 import IndexList from '../pages/index-list'
 import Picker from '../pages/picker'
+import Slide from '../pages/slide'
 
 Vue.use(Router)
 
@@ -39,6 +40,10 @@ export default new Router({
         {
           path: 'picker/:lang',
           component: Picker
+        },
+        {
+          path: 'slide/:lang',
+          component: Slide
         }
       ]
     }

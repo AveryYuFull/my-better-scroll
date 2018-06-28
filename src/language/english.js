@@ -66,5 +66,9 @@ export default {
     linkage: 'Linkage',
     confirmTxt: 'confirm | ok',
     cancelTxt: 'cancel | close'
+  },
+
+  slidePage: {
+    desc: 'Slide is a typical component at mobile end, support horizontal move.'
   }
 }

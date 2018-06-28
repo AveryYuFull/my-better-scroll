@@ -75,7 +75,10 @@ export default {
            line-height: 20px;
            font-size: 14px;
            color: #606c71;
-       } 
+       }
+       .content {
+           margin: 0px 10px 10px 10px;
+       }
     }
 }
 </style>

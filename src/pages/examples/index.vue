@@ -37,7 +37,7 @@ export default {
         }, {
             img: 'slidePic',
             title: 'slide',
-            path: ''
+            path: '/examples/slide/' + this.$i18n.locale
         }, {
             img: 'startGuidancePic',
             title: 'startGuidance',
