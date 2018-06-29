@@ -23,7 +23,7 @@ export default {
         },
         autoPlay: {
             type: Boolean,
-            default: true
+            default: false
         },
         interval: {
             type: Number,
@@ -56,6 +56,9 @@ export default {
             }
         }, 20)
         window.addEventListener('resize', () => {
+            if (!this.slide || !this.slide.enabled) {
+                return
+            }
             clearTimeout(this.resizeTimer)
             this.resizeTimer = setTimeout(() => {
                 this.refresh()
@@ -67,6 +70,31 @@ export default {
         this.slide = null
         this.playTimer = null
         this.resizeTimer = null
+    },
+    activated () {
+        if (!this.slide) {
+            return
+        }
+        this.slide.enable()
+        let pageIndex = this.slide.getCurrentPage().pageX
+        if (pageIndex > this.dots.length) {
+            pageIndex = pageIndex % this.dots.length
+        }
+        this.slide.goToPage(pageIndex, 0, 0)
+        this.currentPageIndex = pageIndex
+        if (this.autoPlay) {
+            this._play()
+        }
+    },
+    deactivated () {
+        this.slide.disable()
+        clearTimeout(this.playTimer)
+        clearTimeout(this.resizeTimer)
+    },
+    beforeDestroy () {
+        this.slide.disable()
+        clearTimeout(this.playTimer)
+        clearTimeout(this.resizeTimer)
     },
     methods: {
         refresh () {
@@ -99,7 +127,8 @@ export default {
                     loop: this.loop,
                     threshold: 0.3,
                     speed: 400
-                }
+                },
+                click: this.click
             })
             this.slide.on('scrollEnd', this._onScrollEnd)
         },
@@ -131,6 +160,10 @@ export default {
         display: flex;
         .slide-item {
             a {
+                display: block;
+                width: 100%;
+                overflow: hidden;
+                text-decoration: none;
                 img {
                     display: block;
                     width: 100%;
