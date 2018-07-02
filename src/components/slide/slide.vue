@@ -158,6 +158,7 @@ export default {
     text-align: center;
     .slide-group {
         display: flex;
+        height: 100%;
         .slide-item {
             a {
                 display: block;

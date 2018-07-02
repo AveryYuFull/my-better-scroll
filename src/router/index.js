@@ -6,6 +6,7 @@ import VerticalScroll from '../pages/vertical-scroll'
 import IndexList from '../pages/index-list'
 import Picker from '../pages/picker'
 import Slide from '../pages/slide'
+import FullPageSlide from '../pages/full-page-slide'
 
 Vue.use(Router)
 
@@ -44,6 +45,10 @@ export default new Router({
         {
           path: 'slide/:lang',
           component: Slide
+        },
+        {
+          path: 'full-page-slide/:lang',
+          component: FullPageSlide
         }
       ]
     }

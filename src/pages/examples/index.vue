@@ -41,7 +41,7 @@ export default {
         }, {
             img: 'startGuidancePic',
             title: 'startGuidance',
-            path: ''
+            path: '/examples/full-page-slide/' + this.$i18n.locale
         }, {
             img: 'freeScrollPic',
             title: 'freeScroll',

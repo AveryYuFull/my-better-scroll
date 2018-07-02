@@ -71,5 +71,9 @@ export default {
 
   slidePage: {
     desc: '轮播图是移动端常见的需求，支持左右滑动。'
+  },
+
+  fullPageSlideComponent: {
+    buttonTxt: '开始使用'
   }
 }

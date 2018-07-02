@@ -70,5 +70,9 @@ export default {
 
   slidePage: {
     desc: 'Slide is a typical component at mobile end, support horizontal move.'
+  },
+  
+  fullPageSlideComponent: {
+    buttonTxt: 'Start Use'
   }
 }
