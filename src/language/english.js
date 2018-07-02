@@ -71,8 +71,12 @@ export default {
   slidePage: {
     desc: 'Slide is a typical component at mobile end, support horizontal move.'
   },
-  
+
   fullPageSlideComponent: {
     buttonTxt: 'Start Use'
+  },
+
+  freeScrollPage: {
+    desc: 'Free scroll supports horizontal and vertical move at the same time.'
   }
 }

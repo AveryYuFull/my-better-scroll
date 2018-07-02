@@ -75,5 +75,9 @@ export default {
 
   fullPageSlideComponent: {
     buttonTxt: '开始使用'
+  },
+
+  freeScrollPage: {
+    desc: '自由滚动，可支持横向和纵向同时滚动。'
   }
 }

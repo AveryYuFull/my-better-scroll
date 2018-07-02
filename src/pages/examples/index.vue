@@ -45,7 +45,7 @@ export default {
         }, {
             img: 'freeScrollPic',
             title: 'freeScroll',
-            path: ''
+            path: '/examples/free-scroll/' + this.$i18n.locale
         }, {
             img: 'formListPic',
             title: 'formList',
