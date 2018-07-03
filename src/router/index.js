@@ -8,6 +8,7 @@ import Picker from '../pages/picker'
 import Slide from '../pages/slide'
 import FullPageSlide from '../pages/full-page-slide'
 import FreeScroll from '../pages/free-scroll'
+import FormList from '../pages/form-list'
 
 Vue.use(Router)
 
@@ -54,6 +55,10 @@ export default new Router({
         {
           path: 'free-scroll/:lang',
           component: FreeScroll
+        },
+        {
+          path: 'form-list/:lang',
+          component: FormList
         }
       ]
     }

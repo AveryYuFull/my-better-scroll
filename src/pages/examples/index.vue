@@ -49,7 +49,7 @@ export default {
         }, {
             img: 'formListPic',
             title: 'formList',
-            path: ''
+            path: '/examples/form-list/' + this.$i18n.locale
         }]
     }
 }
