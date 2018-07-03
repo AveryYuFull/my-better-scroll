@@ -3,7 +3,9 @@
         <div slot='content'>
             <scroll ref='scroll'
                 :freeScroll='freeScroll'
-                :scrollBar='scrollBar'>
+                :scrollBar='scrollBar'
+                :pullDownRefresh='false'
+                :pullUpLoad='false'>
                 <div class='content'>
                     <p v-for='(data, index) in datas' :key='index' v-text='data'></p>
                 </div>
@@ -37,4 +39,14 @@ export default {
 </script>
 
 <style lang='less' scoped>
+@import '../../commons/less/variable.less';
+
+.content {
+    width: 1500px;
+    p {
+        font-size: @fontsize-large;
+        padding: 20px;
+        line-height: 200%;
+    }
+}
 </style>

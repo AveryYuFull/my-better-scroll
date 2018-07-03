@@ -70,6 +70,9 @@ export default {
         }
     }
     .wrapper {
+        height: calc(100% - 44px);
+        display: flex;
+        flex-direction: column;
        .desc {
            padding: 20px;
            line-height: 20px;
@@ -77,7 +80,9 @@ export default {
            color: #606c71;
        }
        .content {
+           position: relative;
            margin: 0px 10px 10px 10px;
+           flex: 1;
        }
     }
 }

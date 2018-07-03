@@ -97,6 +97,7 @@ export default {
         overflow: auto;
         transition: all 0.3s;
         transform: translate3d(0, 0, 0);
+        overflow: hidden;
         &.move-enter-active, &.move-leave-active {
             transform: translate3d(100%, 0, 0);
         }

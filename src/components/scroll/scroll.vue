@@ -41,6 +41,9 @@ import BetterScroll from 'better-scroll'
 import Loading from '../../components/loading/loading'
 import { getRect } from '../../commons/js/dom'
 
+const DIRECTION_H = 'horizontal'
+const DIRECTION_V = 'vertical'
+
 export default {
     name: COMPONENT_NAME,
     props: {
@@ -58,13 +61,9 @@ export default {
             type: Number,
             default: 0
         },
-        scrollX: {
-            type: Boolean,
-            default: false
-        },
-        scrollY: {
-            type: Boolean,
-            default: true
+        direction: {
+            type: String,
+            default: DIRECTION_V
         },
         freeScroll: {
             type: Boolean,
@@ -128,8 +127,8 @@ export default {
             const options = {
                 probeType: this.probeType,
                 startY: this.startY,
-                scrollX: this.scrollX,
-                scrollY: this.scrollY,
+                scrollX: this.freeScroll || this.direction === DIRECTION_H,
+                scrollY: this.freeScroll || this.direction === DIRECTION_V,
                 freeScroll: this.freeScroll,
                 click: this.click,
                 scrollbar: this.scrollbar,
@@ -259,19 +258,24 @@ export default {
     bottom: 0;
     overflow: hidden;
     background: #fff;
-    .list-content {
-      position: relative;
-      z-index: 10;
-      background: #fff;
-      .list-item {
-        height: 60px;
-        line-height: 60px;
-        font-size: 18px;
-        padding-left: 20px;
-        border-bottom: 1px solid #e5e5e5;
-        text-align: left;
-      }
+    .scroll-content {
+        display: inline-block;
+        min-width: 100%;
+        .list-content {
+            position: relative;
+            z-index: 10;
+            background: #fff;
+            .list-item {
+                height: 60px;
+                line-height: 60px;
+                font-size: 18px;
+                padding-left: 20px;
+                border-bottom: 1px solid #e5e5e5;
+                text-align: left;
+            }
+        }
     }
+    
   }
 
   .pullDownRefresh-wrapper {
